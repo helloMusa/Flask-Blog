@@ -62,14 +62,15 @@ def login():
 	form = LoginForm()
 	# If login succesful, redirect to homepage
 	if form.validate_on_submit():
-		# Check if email exists for user. Returns None if no email exists
 		user = User.query.filter_by(email=form.email.data).first()
+
 		# Compare database password with password entered in form
 		if user and bcrypt.check_password_hash(user.password, form.password.data):
 			# Log user in
 			login_user(user, remember=form.remember.data)
 			next_page = request.args.get('next')
 			return redirect(next_page) if next_page else redirect(url_for('home'))
+
 		else:
 			flash('Login Unsuccesful. Please check email and password.', 'danger')
 
